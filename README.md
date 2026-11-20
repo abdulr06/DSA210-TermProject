@@ -1,57 +1,51 @@
 # Why Do Gaming Creators Quit? A Longitudinal Analysis of Gameplay Performance, Highlight Generation, and Audience Feedback (2018–2026)
+ 
+**Author:** Abdul Rahman Muhammad Ehsan Ul Haque  
 
-## **Author:** Abdul Rahman Muhammad Ehsan Ul Haque
+---
 
 ## Overview & Motivation
+Many independent gaming creators start uploading consistently, hit a creative peak, and eventually abandon their channels—even while continuing to play the game for years afterward. 
 
-Many independent gaming creators start uploading consistently, plateau, and eventually abandon their channels—even while continuing to play the game for years afterward.
+Initial exploratory analysis of my YouTube Studio archive (`130` videos, `16,761` total views) reveals that my channel did not die abruptly in late 2023; rather, it peaked between **late 2020 and mid-2021** (`2020 Q4` peak output of 36 videos; `2021 Q1` peak efficiency of 304.1 views/video) before entering a prolonged upload and click-through decay through November 2023.
 
-This project investigates the empirical drivers behind quitting content creation using an 8-year personal multimodal dataset spanning **pre-channel baseline play (2018–2019)**, an **active YouTube publishing era (Nov 2019 – Nov 2023)**, and a **post-channel control period (Nov 2023 – Nov 2026)**. By merging competitive match telemetry, local gameplay clip metadata/computer vision features, and YouTube Studio analytics, this study tests whether channel abandonment was triggered by declining in-game performance, algorithmic stagnation, or the "creator burden" of filming and editing.
+This project investigates the empirical drivers behind that decline by merging three personal longitudinal datasets across three distinct behavioral regimes:
+1. **Prime Creator Era (`Jul 2020 – Jun 2021`):** Peak upload cadence, watch time, and subscriber growth.
+2. **Channel Decay Era (`Jul 2021 – Nov 1, 2023`):** Sharp drop in upload frequency (`-75%+`) and median CTR (`~9.0%` → `~6.4%`).
+3. **Post-Creator Control Era (`Nov 2, 2023 – Nov 2026`):** Pure recreational/competitive play after abandoning YouTube uploads.
 
 ---
 
 ## Research Questions & Hypotheses
 
-1. **The "Creator Burden" Hypothesis (2020–2023 vs. 2024–2026)**
-   - _Question:_ Did playing for content hurt or improve actual in-game performance compared to playing purely recreationally after quitting YouTube?
-   - _Hypothesis:_ Competitive performance metrics (K/D ratio, win rate, kills/match) and raw clip-saving frequency differ significantly between the active creator era and the post-creator era.
+1. **The "Creator Burden" Hypothesis (Prime Era vs. Decay Era vs. Post-Creator Era)**
+   * *Question:* Did playing for content during my YouTube Prime (2020–2021) help or hurt actual in-game performance and match volume compared to my Decay (2021–2023) and Post-Creator (2023–2026) eras?
+   * *Hypothesis:* Competitive performance metrics (seasonal K/D, win rate, kills/match, and total matches played) differ significantly across the three channel lifecycle regimes.
 
 2. **The "Algorithmic Burnout" Hypothesis (Nov 2019 – Nov 2023)**
-   - _Question:_ Did upload cessation follow a collapse in viewer engagement, or did irregular upload gaps precede the decay in views and impressions?
-   - _Hypothesis:_ Lagged cross-correlation and change-point detection will reveal a structural break in upload cadence prior to the channel's final inactivity in November 2023.
+   * *Question:* Did upload frequency drop after viewer engagement (CTR and views) declined, or did irregular upload gaps precede the collapse in channel impressions?
+   * *Hypothesis:* Lagged cross-correlation and change-point detection (`ruptures`) on daily YouTube time-series data will identify a structural break in upload cadence immediately following the 2020 Q4 – 2021 Q1 peak.
 
-3. **The "Highlight Quality vs. Retention" Hypothesis (2019–2023 Overlap)**
-   - _Question:_ Do higher-intensity gameplay moments (measured via clip saving bursts, clip duration, and HUD elimination counts) translate into higher YouTube audience retention and click-through rates?
-   - _Hypothesis:_ Videos backed by denser clip bursts and higher-elimination gameplay achieved higher average view duration than routine uploads.
+3. **The "Highlight Intensity & Play-Pattern" Hypothesis (Clip Telemetry + HUD OCR)**
+   * *Question:* Do gameplay session patterns (time of day, clip duration distributions, and OCR-extracted HUD elimination counts) reflect a shift from content-focused highlight hunting to casual late-night play?
+   * *Hypothesis:* Clip duration, session clustering, and elimination density vary systematically by time of day and competitive season.
 
 ---
 
-## Data Sources
+## Data Sources & Bias Controls
 
 All data in this repository is strictly personal, spanning three overlapping timelines:
 
-| Dataset                       | Time Span                 | Source & Format                                                          | Key Variables Extracted                                                                                           |
-| :---------------------------- | :------------------------ | :----------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------- |
-| **YouTube Channel Analytics** | Nov 1, 2019 – Nov 1, 2023 | YouTube Studio Export (`Table data.csv`, `Chart data.csv`, `Totals.csv`) | Publish timestamps, views, watch time, average view duration, impressions, CTR, daily channel trends              |
-| **Raw Gameplay Clips**        | 2018 – Nov 2026           | Local video archive metadata & sampled HUD frames (`clips_metadata.csv`) | Clip creation timestamps, session clustering, clip duration, resolution/FPS, OCR-extracted HUD elimination counts |
-| **Fortnite Tracker Stats**    | 2020 – Nov 2026           | Personal profile match & seasonal telemetry (`fortnite_stats.csv`)       | Seasonal K/D, win rate, matches played, kills per match, TRN rating across Chapters                               |
+| Dataset | Time Span | Source & Format | Key Variables Extracted |
+| :--- | :--- | :--- | :--- |
+| **YouTube Channel Analytics** | Nov 1, 2019 – Nov 1, 2023 | YouTube Studio Export (`Table data.csv`, `Chart data.csv`, `Totals.csv`) | Publish timestamps, views, watch time, average view duration, impressions, CTR, daily channel trends |
+| **Raw Gameplay Clips** | 2018 – Nov 2026 | Local video archive metadata & sampled HUD frames (`clips_metadata.csv`, `2,769` unique clips) | Clip creation timestamps, session clustering, clip duration, resolution/FPS, playability flags, OCR HUD kills |
+| **Fortnite Tracker Stats** | 2020 – Nov 2026 | Personal profile seasonal & match telemetry (`fortnite_stats.csv`) | Seasonal matches played, K/D, win rate, kills per match, TRN rating across Chapters |
 
-_(Note: Raw `.mp4`/`.mkv` video files are excluded via `.gitignore`; only extracted tabular metadata and telemetry scripts are stored in this repository.)_
+**Methodological Control for Archival/Recency Bias:**  
+Initial inspection of the `2,769` local clips showed a large volume surge starting in 2023 (`2,295` clips in 2023 vs. `172` across 2020–2022) because active clip-saving habits were not adopted consistently until 2023. Therefore, raw clip counts are **not** used as a proxy for historical playtime; instead, **Fortnite Tracker `Matches Played`** serves as the unbiased denominator for gameplay volume across 2020–2026, while the dense 2023–2026 clip archive is analyzed for session timing, duration distributions, and computer-vision HUD telemetry.
 
----
-
-## Methodology & Planned Pipeline
-
-1. **Data Collection & Preprocessing (`src/`)**
-   - Parse and clean YouTube Studio daily and video-level CSV exports.
-   - Extract file creation timestamps, durations, and video properties across the 2018–2026 clip archive (`ffprobe` / `OpenCV`), plus OCR HUD telemetry on sampled highlight frames.
-   - Collect and standardize 2020–2026 seasonal and match-level stats from Fortnite Tracker.
-2. **Exploratory Data Analysis (`notebooks/01_youtube_eda.ipynb`)**
-   - Visualize multi-year timelines aligning upload cadence, view decay, clip generation density, and seasonal K/D curves.
-3. **Statistical Inference & Modeling (`notebooks/`)**
-   - **Hypothesis Testing:** Mann-Whitney U and two-sample t-tests comparing Creator Era vs. Post-Creator Era performance.
-   - **Time-Series Analysis:** Change-point detection (`ruptures`) and lagged cross-correlation to pinpoint the exact inflection point of channel decline.
-   - **Predictive Modeling:** Regression/classification models linking gameplay intensity features to video retention metrics.
+*(Note: Raw `.mp4`/`.mkv` video files are excluded via `.gitignore`; only extracted tabular metadata and analysis scripts are committed.)*
 
 ---
 
@@ -63,10 +57,11 @@ DSA210-TermProject/
 │   ├── raw/
 │   │   ├── youtube/            # Raw YouTube Studio CSV exports (2019–2023)
 │   │   └── fortnite_tracker/   # Extracted Fortnite Tracker stats (2020–2026)
-│   └── processed/              # Cleaned, merged datasets & clip metadata CSVs
+│   └── processed/
+│       └── clips_metadata.csv  # Deduplicated metadata for 2,769 local clips (2018–2026)
 ├── notebooks/
-│   └── 01_youtube_eda.ipynb    # Initial EDA on YouTube Studio analytics
-├── src/                        # Data extraction, clip metadata, and OCR scripts
+│   └── 01_youtube_eda.ipynb    # Exploratory analysis of YouTube lifecycle & regimes
+├── src/
+│   └── extract_clip_metadata.py # Multi-directory video metadata & playability scanner
 ├── .gitignore
 └── README.md
-```
