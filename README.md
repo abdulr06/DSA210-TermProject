@@ -1,6 +1,6 @@
 # Why Do Gaming Creators Quit? A Longitudinal Analysis of Gameplay Performance, Highlight Generation, and Audience Feedback (2018–2026)
  
-**Author:** Abdul Rahman Muhammad Ehsan Ul Haque  
+**Author:** Abdul Rehman Muhammad  
 
 ---
 
