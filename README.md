@@ -1,7 +1,7 @@
 # Why Do Gaming Creators Quit? A Longitudinal Analysis of Gameplay Performance, Highlight Generation, and Audience Feedback (2018–2026)
 
 **Course:** DSA210 — Introduction to Data Science (Fall 2026)  
-**Author:** Abdul Rahman Muhammad Ehsan Ul Haque  
+**Author:** Abdul Rehman Muhammad - 36077
 
 ---
 
